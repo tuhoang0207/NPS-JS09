@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <link rel="stylesheet" href="../css/signup.css" />
+</head>
+
+<body>
+    <div class="login">
+        <div class="login-triangle"></div>
+
+        <h2 class="login-header">Log in</h2>
+
+        <div class="login-container">
+            <p><input type="text" placeholder="Username" id="username" required></p>
+            <p><input type="email" placeholder="Email" id="email" required></p>
+            <p><input type="password" placeholder="Password" id="password" required></p>
+            <p><input type="password" name="repeatPassword" id="repeatPassword" placeholder="Repeat password" required>
+            </p>
+            <p id="error-message"></p>
+            <p><input type="submit" value="Sign up" id="signup-btn"></p>
+        </div>
+    </div>
+
+    <!-- javascript here -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+        import { getDatabase, set, ref, update } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyDgQ1l4XzSXGpt_eBAVVHvPMifaHLiqhXM",
+            authDomain: "grocery-e10a3.firebaseapp.com",
+            projectId: "grocery-e10a3",
+            storageBucket: "grocery-e10a3.appspot.com",
+            messagingSenderId: "618731964756",
+            appId: "1:618731964756:web:4c18a4842b55c3577ba0c1",
+            measurementId: "G-YL7CWWGWLV"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const database = getDatabase(app);
+
+
+        let signUp = document.getElementById("signup-btn")
+        signUp.addEventListener("click", () => {
+            let username = document.getElementById("username").value;
+            let email = document.getElementById('email').value;
+            let password = document.getElementById('password').value;
+
+            let repeatPassword = document.getElementById('repeatPassword').value;
+            let errorMessage = document.getElementById('error-message');
+
+            //validate confirm password
+            if (password == repeatPassword) {
+                console.log("password is correct");
+                errorMessage.innerHTML = "<p style='display: none;'></p>"
+            } else if (password != repeatPassword) {
+                console.log("password is incorrect");
+                errorMessage.innerHTML = "<p style='color:red';>Incorrect password</p>"
+            }
+
+            //create user on authentication firebase
+            createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // Signed in 
+                const user = userCredential.user;
+
+                set(ref(database, 'users/' + user.uid), {
+                    username: username,
+                    email: email,
+                    password: password
+                })
+                    .then(() => {
+                        localStorage.setItem('userId', user.uid);
+                        localStorage.setItem('username', username);
+                    
+                        
+                        // Data saved successfully!
+                        alert('user created!');
+                        sessionStorage.setItem('userId', user.uid);
+                        sessionStorage.setItem('username', username);
+                        window.location = 'index.html';
+                    })
+                    .catch((error) => {
+                        // The write failed...
+                        alert(error)
+                    });
+                
+
+                // ...
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+
+                alert('errorMessage');
+                // ..
+            });
+        })
+    </script>
+</body>
+
+</html>
