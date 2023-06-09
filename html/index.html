@@ -1552,6 +1552,62 @@
           console.error(error);
         });
 
+
+        //product array
+        let productArr = [
+            {
+                name: 'camera',
+                price: 10000
+            },
+            {
+                name: 'sweater',
+                price: 20000
+            },
+            {
+                name: 'lamp',
+                price: 30000
+            },
+            {
+                name: 'adidas shoes',
+                price: 40000
+            },
+            {
+                name: 'flycam',
+                price: 50000
+            },
+            {
+                name: 'watch',
+                price: 60000
+            },
+            {
+                name: 't-shirt',
+                price: 70000
+            },
+            {
+                name: 'sunscreen',
+                price: 80000
+            }
+        ]
+
+        //get current time
+        let today = new Date();
+        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        //add to cart
+        let addToCart = document.getElementsByClassName('fa fa-shopping-cart')
+        for(let i = 0; i < addToCart.length;i++) {
+            addToCart[i].addEventListener('click',() => {
+                userId = sessionStorage.getItem('userId');
+                const db = getDatabase();
+                // alert('alo')
+                debugger
+                update(ref(db, 'users/' + userId + '/items/' + productArr[i].name), {
+                    product: productArr[i].name,
+                    price: productArr[i].price,
+                    timeOrder: time
+                });
+            })
+        }
+
       //check session null
       if (sessionStorage.getItem("userId") != null) {
         let elems = document.querySelectorAll(".hidden-li");
