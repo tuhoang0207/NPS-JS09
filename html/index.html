@@ -46,20 +46,22 @@
         <div class="col-lg-6 text-center text-lg-right">
           <div class="d-inline-flex align-items-center">
             <div class="btn-group">
-              <button
+              <!-- <button
                 type="button"
                 class="btn btn-sm btn-light dropdown-toggle"
                 data-toggle="dropdown"
                 id="welcome-username"
               >
                 My Account
-              </button>
+              </button> -->
+              <h6 id="welcome-username" style="margin-top: 14px;"></h6>
               <button
                 type="button"
                 class="btn btn-sm btn-light dropdown-toggle"
                 data-toggle="dropdown"
+                id="dropdown-account"
               >
-                My Account
+                Login
               </button>
               <div class="dropdown-menu dropdown-menu-right">
                 <button
@@ -76,10 +78,11 @@
                 >
                   Đăng nhập
                 </button>
-                <button class="dropdown-item" type="button" id="logout-btn">
-                  Đăng xuất
-                </button>
+                
               </div>
+              <button class="dropdown-item" type="button" id="logout-btn" style="width: 50%;">
+                Đăng xuất
+              </button>
             </div>
 
             <div class="btn-group mx-2">
@@ -1610,6 +1613,7 @@
 
       //check session null
       if (sessionStorage.getItem("userId") != null) {
+        document.getElementById("dropdown-account").style.display = "none"
         let elems = document.querySelectorAll(".hidden-li");
         let index = 0,
           length = elems.length;
